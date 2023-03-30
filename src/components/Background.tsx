@@ -1,28 +1,18 @@
 import styled from "styled-components";
 
 export default function Background() {
-  interface Image {
-    src: string;
-    alt: string;
-    className: string;
-  }
-
-  const images: Image[] = [
-    { src: "./images/sunFace.png", className: "sunFaceImg", alt: "sunFaceImg" },
-    { src: "./images/sun.png", className: "sunImg", alt: "sunImg" },
-    { src: "./images/family.png", className: "familyImg", alt: "familyImg" },
-    { src: "./images/house.png", className: "houseImg", alt: "houseImg" },
-  ];
+  const images: string[] = ["sunFace", "sun", "family", "house"];
+  // 배경 이미지 뿌리기
 
   return (
     <ImgContainer>
       {images.map((image) => {
         return (
           <img
-            key={image.alt}
-            src={image.src}
-            className={image.className}
-            alt={image.alt}
+            key={image}
+            src={`./images/${image}.png`}
+            className={`${image}Img`}
+            alt={`${image}Img`}
           ></img>
         );
       })}
@@ -31,9 +21,11 @@ export default function Background() {
 }
 
 const ImgContainer = styled.div`
-  position: relative;
+  position: fixed;
+  top: 0;
   width: 100vw;
   height: 100vh;
+  z-index: -100;
 
   > .sunFaceImg {
     position: absolute;
@@ -87,7 +79,7 @@ const ImgContainer = styled.div`
     left: 2rem;
     bottom: 4rem;
     width: 40rem;
-    z-index: -1;
+    z-index: -100;
 
     @media screen and (max-width: 1200px) {
       left: 1rem;
@@ -106,7 +98,8 @@ const ImgContainer = styled.div`
     position: absolute;
     right: 2rem;
     top: 7rem;
-    width: 35rem;
+    width: 30rem;
+    z-index: -100;
 
     @media screen and (max-width: 1200px) {
       right: 1rem;
