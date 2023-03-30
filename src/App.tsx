@@ -5,8 +5,8 @@ import styled from "styled-components";
 import Background from "./components/Background";
 
 function App() {
-  const Main = React.lazy(() => import("./components/Main"));
-  const Home = React.lazy(() => import("./components/Home"));
+  const Main = React.lazy(() => import("./components/Main/Main"));
+  const Home = React.lazy(() => import("./components/Home/Home"));
   // 굳이 안적어도 부모에서 알아서 import 대기
 
   return (
