@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useState } from "react";
-import { useSetRecoilState, useRecoilState } from "recoil";
-import { itemState, penAlterState } from "../../atom/atom";
+import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
+import { itemState, penAlterState, selectNumState } from "../../atom/atom";
 
 type Tool = {
   [key: string]: number | string;
@@ -31,7 +31,7 @@ export default function AddTodo(): JSX.Element {
     { 몰래안하기: 0 },
   ];
   // select 옵션값들
-  const setItems = useSetRecoilState(itemState);
+  const [items, setItems] = useRecoilState(itemState);
   // todolist 전역 상태 추가를 위한 atom 불러오기
   const [penState, setPenState] = useRecoilState(penAlterState);
   // 제출하고 나면 모달창 닫기를 위한 penState 상태 변경
@@ -39,9 +39,33 @@ export default function AddTodo(): JSX.Element {
   // room option 선택 상태값
   const [tool, setTool] = useState("");
   // tool option 선택 상태값
+  const [selectState, setSelectState] = useRecoilState(selectNumState);
 
   const AddTodo = (event: React.FormEvent) => {
     event.preventDefault();
+    const idx = items.findIndex((todo) => todo.id === selectState);
+    // AddTodo, 이미 작성된 요소를 선택 시,
+    // 선택한 요소의 id 값을 저장하고,
+    // 저장된 id 값이 있을 시 선택한 요소에 새로운 값으로 update
+    if (selectState !== -1) {
+      if (room !== "" && tool != "") {
+        setItems((prev) => [
+          ...prev.slice(0, idx),
+          {
+            id: selectState,
+            room,
+            tool,
+          },
+          ...prev.slice(idx + 1),
+        ]);
+        setRoom("");
+        setTool("");
+        setPenState(!penState);
+      }
+      setSelectState(-1);
+      return;
+    }
+
     if (room !== "" && tool != "") {
       setItems((prev: TodoItem[]) => [
         ...prev,

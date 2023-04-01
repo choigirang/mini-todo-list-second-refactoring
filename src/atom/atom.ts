@@ -8,6 +8,12 @@ export const penAlterState = atom({
   key: "penAlterState",
   default: false,
 });
+
+export const selectNumState = atom({
+  key: "selectNumState",
+  default: -1,
+});
+
 export const stopAlterState = atom({
   key: "stopAlterState",
   default: true,
