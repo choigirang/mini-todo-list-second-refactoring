@@ -36,7 +36,7 @@ const Template = styled.div`
   background-color: #dddddd;
   box-shadow: 0rem 0rem 2rem 0rem #4c4c4c;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   padding: 1%;
 `;
