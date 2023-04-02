@@ -3,17 +3,23 @@ import { atom } from "recoil";
 // 사용되는 모든 상태 타입의 부모 타입이다.
 // RecoilState<boolean>은 boolean값을 저장하고 업데이트 한다.
 
+type Room = {
+  [key: string]: number;
+};
+
 // Home 컴포넌트에서 사용 Btn
 export const penAlterState = atom({
   key: "penAlterState",
   default: false,
 });
 
+// 수정을 위한 id값 저장
 export const selectNumState = atom({
   key: "selectNumState",
   default: -1,
 });
 
+// Home 컴포넌트에서 사용 Btn
 export const stopAlterState = atom({
   key: "stopAlterState",
   default: true,
@@ -25,11 +31,13 @@ export const rejectAlterState = atom({
   default: true,
 });
 
-// Main 이름 입력창
+// Main 이름 입력창 modal
 export const nameInputState = atom({
   key: "nameInputState",
   default: false,
 });
+
+// Main 이름 입력창으로 저장
 export const tippingName = atom({
   key: "tippingName",
   default: "",
@@ -42,6 +50,18 @@ export const itemState = atom({
     { id: 1, room: "엄마방", tool: "청소기돌리기" },
     { id: 2, room: "아빠방", tool: "청소기돌리기" },
     { id: 3, room: "내방", tool: "청소기돌리기" },
+  ],
+});
+
+// 청소 퍼센테이지 저장
+export const roomState = atom<Room[]>({
+  key: "roomState",
+  default: [
+    { 엄마방: 0 },
+    { 아빠방: 0 },
+    { 내방: 0 },
+    { 누나방: 0 },
+    { 거실: 0 },
   ],
 });
 // selector - atom을 기반으로 파생된 값을 계산할 때 사용
