@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
 import { itemState, penAlterState, selectNumState } from "../../atom/atom";
+import axios from "axios";
 
 type Tool = {
   [key: string]: number | string;
@@ -23,6 +24,7 @@ export default function AddTodo(): JSX.Element {
     "누나방",
     "거실",
   ];
+
   const tools: Tool[] = [
     { 도구선택: "소요시간" },
     { 청소기돌리기: 3 },
@@ -30,6 +32,7 @@ export default function AddTodo(): JSX.Element {
     { 빗자루질하기: 2 },
     { 몰래안하기: 0 },
   ];
+
   // select 옵션값들
   const [items, setItems] = useRecoilState(itemState);
   // todolist 전역 상태 추가를 위한 atom 불러오기
@@ -41,40 +44,64 @@ export default function AddTodo(): JSX.Element {
   // tool option 선택 상태값
   const [selectState, setSelectState] = useRecoilState(selectNumState);
 
-  const AddTodo = (event: React.FormEvent) => {
+  const addTodo = (event: React.FormEvent) => {
     event.preventDefault();
     const idx = items.findIndex((todo) => todo.id === selectState);
+    console.log(room, tool);
     // AddTodo, 이미 작성된 요소를 선택 시,
     // 선택한 요소의 id 값을 저장하고,
     // 저장된 id 값이 있을 시 선택한 요소에 새로운 값으로 update
-    if (selectState !== -1) {
-      if (room !== "" && tool != "") {
-        setItems((prev) => [
-          ...prev.slice(0, idx),
-          {
-            id: selectState,
-            room,
-            tool,
-          },
-          ...prev.slice(idx + 1),
-        ]);
-        setRoom("");
-        setTool("");
-        setPenState(!penState);
-      }
-      setSelectState(-1);
-      return;
-    }
+    // if (selectState !== -1) {
+    //   if (room !== "" && tool != "") {
+    //     // setItems((prev) => [
+    //     //   ...prev.slice(0, idx),
+    //     //   {
+    //     //     id: selectState,
+    //     //     room,
+    //     //     tool,
+    //     //   },
+    //     //   ...prev.slice(idx + 1),
+    //     // ]);
+    //     // 리코일 상태 update
+
+    //     // api update
+    //     axios
+    //       .post(`http://localhost:4000/todos`, {
+    //         selectState,
+    //         room,
+    //         tool,
+    //       })
+    //       .then((res) => {
+    //         console.log(res.data);
+    //       })
+    //       .catch((err) => {
+    //         console.log(err);
+    //       });
+    //     setRoom("");
+    //     setTool("");
+    //     setPenState(!penState);
+    //   }
+    //   setSelectState(-1);
+    //   return;
+    // }
 
     if (room !== "" && tool != "") {
-      setItems((prev: TodoItem[]) => [
-        ...prev,
-        {
-          id: prev.length + 1,
-          room,
-          tool,
-        },
-      ]);
+      // setItems((prev: TodoItem[]) => [
+      //   ...prev,
+      //   {
+      //     id: prev.length + 1,
+      //     room,
+      //     tool,
+      //   },
+      // ]);
+      axios
+        .post(`http://localhost:4000/todos`, 1)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       setRoom("");
       setTool("");
       setPenState(!penState);
@@ -91,7 +118,7 @@ export default function AddTodo(): JSX.Element {
             X
           </div>
         </div>
-        <form onSubmit={AddTodo}>
+        <form onSubmit={addTodo}>
           <div>
             <span className="">어디를 청소하지?</span>
             <select

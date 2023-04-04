@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
+import axios from "axios";
 import {
   itemState,
   penAlterState,
   roomState,
   selectNumState,
 } from "./../../atom/atom";
+
+interface Todo {
+  id: number;
+  room: string;
+  tool: string;
+}
 
 export default function TodoList() {
   const [list, setList] = useRecoilState(itemState);
@@ -16,13 +23,35 @@ export default function TodoList() {
   const [selectState, setSelectState] = useRecoilState(selectNumState);
   // 클릭한 요소의 id 값 저장을 위한 상태값
   const [rooms, setRooms] = useRecoilState(roomState);
+  // 클릭한 요소에 따라 퍼센테이지를 올려주기
+  const [apiTodos, setApiTodos] = useState<Todo[]>();
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/todos")
+      .then((res) => {
+        setApiTodos(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  // api에서 todoList 받아오기
 
   const deleteTodo = (
     event: React.MouseEvent<HTMLSpanElement, MouseEvent> | undefined,
     id: number
   ) => {
     event!.stopPropagation();
-    setList((prev) => prev.filter((item) => item.id !== id));
+    // setList((prev) => prev.filter((item) => item.id !== id));
+    // 리코일 상태값
+
+    // api 작성
+    axios
+      .delete(`http://localhost:4000/todos/${id}`)
+      .then((res) => {
+        setApiTodos((prev) => prev?.filter((item) => item.id !== id));
+      })
+      .catch((err) => console.log(err));
   };
   // 클릭한 요소 삭제
 
@@ -68,26 +97,27 @@ export default function TodoList() {
 
   return (
     <Container>
-      {list.map((item) => (
-        <div key={item.id} onClick={() => updateTodo(item.id)}>
-          <input
-            type="checkBox"
-            onClick={(event) => {
-              event.stopPropagation();
-              increaseRoomState(item.room, item.tool);
-            }}
-          />
-          <span>{item.room}</span>
-          <span>{item.tool}</span>
-          <span
-            onClick={(event) => {
-              deleteTodo(event, item.id);
-            }}
-          >
-            X
-          </span>
-        </div>
-      ))}
+      {apiTodos &&
+        apiTodos.map((item) => (
+          <div key={item.id} onClick={() => updateTodo(item.id)}>
+            <input
+              type="checkBox"
+              onClick={(event) => {
+                event.stopPropagation();
+                increaseRoomState(item.room, item.tool);
+              }}
+            />
+            <span>{item.room}</span>
+            <span>{item.tool}</span>
+            <span
+              onClick={(event) => {
+                deleteTodo(event, item.id);
+              }}
+            >
+              X
+            </span>
+          </div>
+        ))}
     </Container>
   );
 }

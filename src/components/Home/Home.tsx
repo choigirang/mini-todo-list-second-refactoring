@@ -4,9 +4,20 @@ import styled from "styled-components";
 import InsertBtn from "./InsertBtn";
 import { useRecoilState } from "recoil";
 import { penAlterState } from "../../atom/atom";
+import axios from "axios";
+import { useEffect } from "react";
 
 export default function Home() {
   const [penState, setPenState] = useRecoilState(penAlterState);
+
+  useEffect(() => {
+    async function axiosData() {
+      const res = await axios.get("/");
+      console.log(res);
+    }
+
+    axiosData();
+  }, []);
 
   return (
     <Container>
