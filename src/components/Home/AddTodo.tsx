@@ -47,43 +47,42 @@ export default function AddTodo(): JSX.Element {
   const addTodo = (event: React.FormEvent) => {
     event.preventDefault();
     const idx = items.findIndex((todo) => todo.id === selectState);
-    console.log(room, tool);
     // AddTodo, 이미 작성된 요소를 선택 시,
     // 선택한 요소의 id 값을 저장하고,
     // 저장된 id 값이 있을 시 선택한 요소에 새로운 값으로 update
-    // if (selectState !== -1) {
-    //   if (room !== "" && tool != "") {
-    //     // setItems((prev) => [
-    //     //   ...prev.slice(0, idx),
-    //     //   {
-    //     //     id: selectState,
-    //     //     room,
-    //     //     tool,
-    //     //   },
-    //     //   ...prev.slice(idx + 1),
-    //     // ]);
-    //     // 리코일 상태 update
+    if (selectState !== -1) {
+      if (room !== "" && tool != "") {
+        // setItems((prev) => [
+        //   ...prev.slice(0, idx),
+        //   {
+        //     id: selectState,
+        //     room,
+        //     tool,
+        //   },
+        //   ...prev.slice(idx + 1),
+        // ]);
+        // 리코일 상태 update
 
-    //     // api update
-    //     axios
-    //       .post(`http://localhost:4000/todos`, {
-    //         selectState,
-    //         room,
-    //         tool,
-    //       })
-    //       .then((res) => {
-    //         console.log(res.data);
-    //       })
-    //       .catch((err) => {
-    //         console.log(err);
-    //       });
-    //     setRoom("");
-    //     setTool("");
-    //     setPenState(!penState);
-    //   }
-    //   setSelectState(-1);
-    //   return;
-    // }
+        // api update
+        axios
+          .post(`http://localhost:4000/todos`, {
+            selectState,
+            room,
+            tool,
+          })
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        setRoom("");
+        setTool("");
+        setPenState(!penState);
+      }
+      setSelectState(-1);
+      return;
+    }
 
     if (room !== "" && tool != "") {
       // setItems((prev: TodoItem[]) => [
@@ -95,7 +94,7 @@ export default function AddTodo(): JSX.Element {
       //   },
       // ]);
       axios
-        .post(`http://localhost:4000/todos`, 1)
+        .post(`http://localhost:4000/todos`, { room, tool })
         .then((res) => {
           console.log(res.data);
         })
