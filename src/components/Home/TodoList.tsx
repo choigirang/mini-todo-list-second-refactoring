@@ -31,11 +31,13 @@ export default function TodoList() {
       .get("http://localhost:4000/todos")
       .then((res) => {
         setApiTodos(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [apiTodos]);
   // api에서 todoList 받아오기
+  // 1. get으로 새로운 요청
+  // 2. state에 바로 추가를 해준다.
+  // 3. post에서 응답값을 업데이트 상태 넣기
 
   const deleteTodo = (
     event: React.MouseEvent<HTMLSpanElement, MouseEvent> | undefined,
@@ -63,8 +65,16 @@ export default function TodoList() {
   // 저장된 id 값이 있다면 AddTodo는
   // 클릭한 요소를 수정한 값으로 새롭게 재배열
 
-  const increaseRoomState = (room: string, tool: string) => {
+  const increaseRoomState = async (id: number, room: string, tool: string) => {
     const idx = rooms.findIndex((idx) => room in idx);
+
+    const { data } = await axios.get(`http://localhost:4000/todos/${id}`);
+    const check = data.checked;
+
+    if (check) return;
+    // data를 받아와서 한 번 청소가 완료된 (checked가 true)
+    // 방의 청소 퍼센테이지가 올라가지 않도록 한다.
+
     if (tool === "청소기돌리기") {
       setRooms((prev) => [
         ...prev.slice(0, idx),
@@ -94,6 +104,24 @@ export default function TodoList() {
       ]);
     }
   };
+  // 입력된 tool에 따라 청소 상태를 증가시키기 위한 함수
+
+  const updateChecked = (id: number, room: string, tool: string) => {
+    axios
+      .patch(`http://localhost:4000/todos/${id}`, {
+        id,
+        room,
+        tool,
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  // input checkBox의 check 여부에 따라 작동을 막기 위해
+  // api data의 checked 설정
 
   return (
     <Container>
@@ -104,7 +132,8 @@ export default function TodoList() {
               type="checkBox"
               onClick={(event) => {
                 event.stopPropagation();
-                increaseRoomState(item.room, item.tool);
+                increaseRoomState(item.id, item.room, item.tool);
+                updateChecked(item.id, item.room, item.tool);
               }}
             />
             <span>{item.room}</span>
