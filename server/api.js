@@ -7,10 +7,14 @@ const { v4: uuidv4 } = require("uuid");
 app.use(cors());
 // cors 접근 설정
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// express 서버를 쓸 때 app.use("/:id", (req,res) => {})
+
 const todos = [
-  { id: 0, room: "엄마방", tool: "몰래안하기" },
-  { id: 1, room: "아빠방", tool: "걸레질하기" },
-  { id: 2, room: "내방", tool: "청소기돌리기" },
+  { id: 0, room: "엄마방", tool: "몰래안하기", checked: false },
+  { id: 1, room: "아빠방", tool: "걸레질하기", checked: false },
+  { id: 2, room: "내방", tool: "청소기돌리기", checked: false },
 ];
 
 app.get("/todos", (req, res) => {
@@ -28,19 +32,38 @@ app.get("/todos/:id", (req, res) => {
   }
 });
 
+// AddTodo 컴포넌트에서 데이터 추가하기
 app.post("/todos", (req, res) => {
-  console.log(req.body);
-  const { room, tool } = req.body;
+  // console.log(req.body);
+  const { selectState, room, tool } = req.body;
   const newTodo = {
     id: todos.length,
     room,
     tool,
   };
-  todos.push(newTodo);
+  const idx = todos.findIndex((todo) => todo.id === selectState);
+  if (idx !== -1) {
+    todos.splice(idx, 1, {
+      id: selectState,
+      room,
+      tool,
+    });
+  } else {
+    todos.push(newTodo);
+  }
   res.json(newTodo);
 });
 
-// 클릭한 요소를 삭제하기
+// input checkbox를 클릭한 요소에 해당하는 데이터의
+// checked 값 설정하기
+app.patch("/todos/:id", (req, res) => {
+  const { id, room, tool } = req.body;
+  const todo = todos.find((item) => item.id === id);
+  todo.checked = true;
+  res.json(todos);
+});
+
+// 클릭한 요소에 해당하는 데이터 삭제하기
 app.delete("/todos/:id", (req, res) => {
   const id = req.params.id;
   const index = todos.findIndex((item) => item.id == id);
