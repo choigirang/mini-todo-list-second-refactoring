@@ -27,6 +27,21 @@ export default function Structure() {
           }
         >
           {name}: {roomClean.find((room) => room[name])?.[name]}
+          {/* <img
+            src={`./images/${
+              name === "엄마방"
+                ? "roomMom"
+                : name === "아빠방"
+                ? "roomDad"
+                : name === "내방"
+                ? "roomMy"
+                : name === "누나방"
+                ? "roomSis"
+                : name === "거실"
+                ? ""
+                : ""
+            }.png`}
+          ></img> */}
         </div>
       ))}
     </Container>
@@ -38,12 +53,20 @@ const Container = styled.div`
   height: 100%;
   background-color: white;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
+  grid-gap: 1%;
   grid-template-areas:
     "a b c"
-    "d e f"
-    "g h i";
+    "d e e"
+    "g e e";
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
   > .momRoom {
     grid-row: 1/3;
@@ -60,9 +83,9 @@ const Container = styled.div`
   }
 
   > .myRoom {
-    grid-row: 2 / 3;
+    grid-row: 2/3;
     border: solid 1px black;
-    grid-column: 1 / 2;
+    grid-column: 1/2;
     grid-area: d;
   }
 
@@ -71,8 +94,9 @@ const Container = styled.div`
   }
 
   > .livRoom {
-    grid-row: 3 / 4;
-    grid-column: 1 / 2;
+    grid-row: 2/4;
+    grid-column: 2/4;
     grid-area: e;
+    background-color: yellow;
   }
 `;
