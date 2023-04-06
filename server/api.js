@@ -11,6 +11,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // express 서버를 쓸 때 app.use("/:id", (req,res) => {})
 
+const clean = [
+  { id: 0, room: "엄마방", clean: 0 },
+  { id: 1, room: "아빠방", clean: 0 },
+  { id: 2, room: "누나방", clean: 0 },
+  { id: 3, room: "내방", clean: 0 },
+  { id: 4, room: "거실", clean: 0 },
+];
+
 const todos = [
   { id: 0, room: "엄마방", tool: "몰래안하기", checked: false },
   { id: 1, room: "아빠방", tool: "걸레질하기", checked: false },
@@ -19,6 +27,10 @@ const todos = [
 
 app.get("/todos", (req, res) => {
   res.json(todos);
+});
+
+app.get("/clean", (req, res) => {
+  res.json(clean);
 });
 
 // 특정 id를 가진 요소 불러오기
@@ -37,9 +49,10 @@ app.post("/todos", (req, res) => {
   // console.log(req.body);
   const { selectState, room, tool } = req.body;
   const newTodo = {
-    id: todos.length,
+    id: todos.length + 1,
     room,
     tool,
+    checked: false,
   };
   const idx = todos.findIndex((todo) => todo.id === selectState);
   if (idx !== -1) {
@@ -47,6 +60,7 @@ app.post("/todos", (req, res) => {
       id: selectState,
       room,
       tool,
+      checked: false,
     });
   } else {
     todos.push(newTodo);
@@ -63,6 +77,13 @@ app.patch("/todos/:id", (req, res) => {
   res.json(todos);
 });
 
+app.patch("/clean", (req, res) => {
+  const { room, num } = req.body;
+  const roomObj = clean.find((item) => item.room === room);
+  roomObj.clean += num;
+  res.json(clean);
+});
+
 // 클릭한 요소에 해당하는 데이터 삭제하기
 app.delete("/todos/:id", (req, res) => {
   const id = req.params.id;
@@ -77,4 +98,25 @@ app.delete("/todos/:id", (req, res) => {
 
 app.listen(4000, () => {
   console.log("Server listening on port 4000");
+});
+
+// 로그인
+
+const login = [
+  { id: "choi", pass: "1234" },
+  { id: "kim", pass: "1234" },
+];
+
+app.get("/login", (req, res) => {
+  res.json(login);
+});
+
+app.post("/login", (req, res) => {
+  const { id, pass } = req.body;
+  const newLogin = {
+    id,
+    pass,
+  };
+  login.push(newLogin);
+  res.json(login);
 });
