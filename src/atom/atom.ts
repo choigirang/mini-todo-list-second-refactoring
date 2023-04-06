@@ -75,3 +75,18 @@ export const roomState = atom<Room[]>({
 
 // atom 값을 가져오려면 useRecoilValue
 // const myAtomValue = useRecoilValue(myAtom);
+
+export const loginState = atom({
+  key: "loginState",
+  default: false,
+});
+
+export const successLoginState = atom({
+  key: "successLoginState",
+  default: false,
+});
+
+export const signInState = atom({
+  key: "signInState",
+  default: false,
+});
