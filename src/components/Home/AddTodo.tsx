@@ -113,7 +113,13 @@ export default function AddTodo(): JSX.Element {
       <TodoPaper>
         <div className="top">
           <div className="title">나에 청소 수첩</div>
-          <div onClick={() => setPenState(!penState)} className="closeBtn">
+          <div
+            onClick={() => {
+              setPenState(!penState);
+              setSelectState(-1);
+            }}
+            className="closeBtn"
+          >
             X
           </div>
         </div>
