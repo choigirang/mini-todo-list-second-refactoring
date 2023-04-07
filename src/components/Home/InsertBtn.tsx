@@ -2,6 +2,7 @@ import { useRecoilState } from "recoil";
 import { penAlterState, stopAlterState } from "./../../atom/atom";
 import styled from "styled-components";
 import AddTodo from "./AddTodo";
+import StopBrowser from "./StopBrowser";
 
 export default function InsertBtn() {
   const images = ["pen", "stopBtn"];
@@ -28,7 +29,7 @@ export default function InsertBtn() {
         );
       })}
       {penState ? <AddTodo /> : null}
-      {stopState ? <></> : null}
+      {stopState ? <StopBrowser /> : null}
     </Container>
   );
 }
