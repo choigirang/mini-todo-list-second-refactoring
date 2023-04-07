@@ -80,6 +80,7 @@ app.patch("/todos/:id", (req, res) => {
 app.patch("/clean", (req, res) => {
   const { room, num } = req.body;
   const roomObj = clean.find((item) => item.room === room);
+  if(roomObj.clean >= 100) return roomObj.clean = 100;
   roomObj.clean += num;
   res.json(clean);
 });
