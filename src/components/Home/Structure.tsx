@@ -8,6 +8,7 @@ interface Room {
   [key: string]: {
     className: string;
     imgName: string;
+    okImg: string;
   };
 }
 
@@ -22,26 +23,34 @@ export default function Structure() {
   // 객체로 관리하면 한 줄로 가능, 객체 key
   const [cleanData, setCleanData] = useState<Clean[]>([]);
 
-  const roomInfo: Record<string, { className: string; imgName: string }> = {
+  const roomInfo: Record<string, { className: string; imgName: string, okImg: string }> = {
     엄마방: {
       className: "momRoom",
       imgName: "roomMom",
+      okImg: "stampMom",
     },
     아빠방: {
       className: "dadRoom",
       imgName: "roomDad",
+      okImg: "stampDad",
+
     },
     내방: {
       className: "myRoom",
       imgName: "roomMy",
+      okImg: "stampSon",
+
     },
     누나방: {
       className: "sisRoom",
       imgName: "roomSis",
+      okImg: "stampSis",
+
     },
     거실: {
       className: "livRoom",
       imgName: "",
+      okImg: "1",
     },
   };
 
@@ -54,15 +63,16 @@ export default function Structure() {
       .catch((err) => console.error(err));
   }, [cleanData]);
 
+
   return (
     <Container>
       {cleanData.map((data) => {
         const { room, clean } = data;
-        const { className, imgName } = roomInfo[room];
+        const { className, imgName, okImg } = roomInfo[room];
         return (
           <div key={room} className={className}>
             {room} : {clean}
-            <img src={`./images/${imgName}.png`} alt={room}></img>
+            {room === "거실" ? null : <img src={clean === 100 ?`./images/${okImg}.png` : `./images/${imgName}.png`} alt={room}></img>}
           </div>
         );
       })}
