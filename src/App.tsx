@@ -22,7 +22,7 @@ function App() {
   const [loginValue, setLoginValue] = useRecoilState(loginState);
   const [successLogin, setsuccessLogin] = useRecoilState(successLoginState);
 
-  //   const navigate = useNavigate();
+  // const navigate = useNavigate();
   // const goBack = () => {
   //   navigate(-1);
   // };
@@ -32,15 +32,13 @@ function App() {
         {/* fallback 설정 */}
         {!successLogin ? <SuccessLogin /> : null}
         {!loginValue ? <Login /> : null}
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="/Home" element={<Home />} />
-          </Routes>
-          <BackIcon icon={faArrowLeft} className="back" />
-          {/*onClick={goBack}*/}
-          {/* BackIcon은 Route안에 있어야 함 */}
-        </BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/Home" element={<Home />} />
+        </Routes>
+        <BackIcon icon={faArrowLeft} className="back" />
+        {/* onClick={goBack} */}
+        {/* BackIcon은 Route안에 있어야 함 */}
       </Suspense>
       <Background />
     </div>
