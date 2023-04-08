@@ -11,16 +11,10 @@ import styled from "styled-components";
 import Background from "./components/Background";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import Login from "./components/Main/Login";
-import { useRecoilState } from "recoil";
-import { loginState, successLoginState } from "./atom/atom";
-import SuccessLogin from "./components/Main/SuccessLogin";
 
 function App() {
   const Main = React.lazy(() => import("./components/Main/Main"));
   const Home = React.lazy(() => import("./components/Home/Home"));
-  const [loginValue, setLoginValue] = useRecoilState(loginState);
-  const [successLogin, setsuccessLogin] = useRecoilState(successLoginState);
 
   // const navigate = useNavigate();
   // const goBack = () => {
@@ -30,13 +24,12 @@ function App() {
     <div className="App">
       <Suspense fallback={<div>Loading...</div>}>
         {/* fallback 설정 */}
-        {!successLogin ? <SuccessLogin /> : null}
-        {!loginValue ? <Login /> : null}
+
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/Home" element={<Home />} />
         </Routes>
-        <BackIcon icon={faArrowLeft} className="back" />
+        {/* <BackIcon icon={faArrowLeft} className="back" /> */}
         {/* onClick={goBack} */}
         {/* BackIcon은 Route안에 있어야 함 */}
       </Suspense>
