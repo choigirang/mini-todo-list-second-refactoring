@@ -24,6 +24,10 @@ export default function Sign() {
   };
   return (
     <Container>
+      <div className="title">가입~</div>
+      <div className="closeBtn" onClick={signApi}>
+        X
+      </div>
       <div className="nameBox">
         <div>id :</div>
         <input
@@ -40,7 +44,9 @@ export default function Sign() {
           value={pass}
         ></input>
       </div>
-      <button onClick={signApi}>sign in</button>
+      <button onClick={signApi} className="sign">
+        sign in
+      </button>
     </Container>
   );
 }
@@ -106,11 +112,27 @@ const Container = styled.div`
     font-size: 1rem;
   }
 
+  > .title {
+    position: absolute;
+    top: 20%;
+    font-size: 3rem;
+    font-family: "Child";
+    text-decoration: underline;
+  }
+
+  .closeBtn {
+    position: absolute;
+    top: 5%;
+    right: 6%;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
   > .nameBox {
     width: 60%;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 
     > input {
       background: linear-gradient(0deg, #ffffff 0%, #b8b8b8 100%);
