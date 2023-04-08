@@ -18,7 +18,6 @@ export default function SuccessLogin() {
           X
         </button>
       </Container>
-      <LoginBackground></LoginBackground>
     </>
   );
 }
@@ -106,10 +105,4 @@ const Container = styled.div`
     color: white;
     font-family: "Child";
   }
-`;
-
-const LoginBackground = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.9);
 `;
