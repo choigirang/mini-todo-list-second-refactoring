@@ -9,13 +9,19 @@ type Tool = {
   [key: string]: number | string;
 };
 
-interface TodoItem {
-  id: number;
-  room: string;
-  tool: string;
-}
+// interface TodoItem {
+//   id: number;
+//   room: string;
+//   tool: string;
+// }
 
-export default function AddTodo(): JSX.Element {
+// JSX.element
+// props로 children 들어갈 때
+// 자식 요소를 공통으로 사용하는 경우에
+// 페이지를 여러 개로 쓰게 되면, 재활용하게 됨
+// children 타입을 정해줘야 한다.
+// 부모쪽에서 해결하자
+export default function AddTodo() {
   const rooms: string[] = [
     "방 선택",
     "엄마방",
