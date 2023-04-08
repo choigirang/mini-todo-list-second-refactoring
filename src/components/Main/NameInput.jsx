@@ -6,8 +6,12 @@ import { useState } from "react";
 export default function NameInput() {
   const [, setName] = useRecoilState(tippingName);
   // 작성한 이름을 전역 상태로 띄우기
+  // useSet < recoilState 가 더 크기 때문에
+  // set만 쓰이면 useSet
   const [nameModal, setNameModal] = useRecoilState(nameInputState);
   // 모달창을 사라지게 할 상태값
+  // 전역 관리 필요 X
+
   const [nameValue, setNameValue] = useState("");
   // 입력한 input의 value로 RecoilState를 변경하기 위한 상태값
   const [answerName, setAnswerName] = useState(true);
