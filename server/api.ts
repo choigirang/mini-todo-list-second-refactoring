@@ -73,16 +73,25 @@ app.post("/todos", (req, res) => {
 app.patch("/todos/:id", (req, res) => {
   const { id, room, tool } = req.body;
   const todo = todos.find((item) => item.id === id);
-  todo.checked = true;
+  if (todo) {
+    todo.checked = true;
+  }
   res.json(todos);
 });
 
 app.patch("/clean", (req, res) => {
   const { room, num } = req.body;
   const roomObj = clean.find((item) => item.room === room);
-  if(roomObj.clean >= 100) return roomObj.clean = 100;
-  roomObj.clean += num;
-  res.json(clean);
+  if (roomObj) {
+    if (roomObj.clean >= 100) {
+      roomObj.clean = 100;
+    } else {
+      roomObj.clean += num;
+    }
+    res.json(clean);
+  } else {
+    res.status(404).send("Room not found");
+  }
 });
 
 // 클릭한 요소에 해당하는 데이터 삭제하기
@@ -102,7 +111,6 @@ app.listen(4000, () => {
 });
 
 // 로그인
-
 const login = [
   { id: "choi", pass: "1234" },
   { id: "kim", pass: "1234" },
@@ -119,5 +127,5 @@ app.post("/login", (req, res) => {
     pass,
   };
   login.push(newLogin);
-  res.json(login);
+  console.log(login);
 });
