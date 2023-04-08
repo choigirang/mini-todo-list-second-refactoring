@@ -71,6 +71,9 @@ export default function TodoList() {
   // 저장된 id 값이 있다면 AddTodo는
   // 클릭한 요소를 수정한 값으로 새롭게 재배열
 
+  // patch를 위해 다시 get을 하고 있음
+  // 불필요한 요청은 최소화
+  // 클라이언트에 있는 데이터를 가지고 사용
   const increaseRoomState = async (id: number, room: string, tool: string) => {
     const idx = rooms.findIndex((idx) => room in idx);
 
@@ -83,6 +86,8 @@ export default function TodoList() {
     // data를 받아와서 한 번 청소가 완료된 (checked가 true)
     // 방의 청소 퍼센테이지가 올라가지 않도록 한다.
 
+    // if문 좀 줄이자
+    // 하드코딩의 왕
     let roomIdx = 0;
     if (room === "엄마방") roomIdx = 0;
     if (room === "아빠방") roomIdx = 1;
