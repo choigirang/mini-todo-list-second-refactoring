@@ -23,7 +23,10 @@ export default function Structure() {
   // 객체로 관리하면 한 줄로 가능, 객체 key
   const [cleanData, setCleanData] = useState<Clean[]>([]);
 
-  const roomInfo: Record<string, { className: string; imgName: string, okImg: string }> = {
+  const roomInfo: Record<
+    string,
+    { className: string; imgName: string; okImg: string }
+  > = {
     엄마방: {
       className: "momRoom",
       imgName: "roomMom",
@@ -33,19 +36,16 @@ export default function Structure() {
       className: "dadRoom",
       imgName: "roomDad",
       okImg: "stampDad",
-
     },
     내방: {
       className: "myRoom",
       imgName: "roomMy",
       okImg: "stampSon",
-
     },
     누나방: {
       className: "sisRoom",
       imgName: "roomSis",
       okImg: "stampSis",
-
     },
     거실: {
       className: "livRoom",
@@ -53,6 +53,7 @@ export default function Structure() {
       okImg: "1",
     },
   };
+  // 리터럴로 mom만 보내기 한 줄로 줄이기
 
   useEffect(() => {
     axios
@@ -61,8 +62,9 @@ export default function Structure() {
         setCleanData(res.data);
       })
       .catch((err) => console.error(err));
-  }, [cleanData]);
-
+  }, []);
+  // 의존성, 무한 => 수정필
+  // 다른 상태를 하나 더 파서 관리(고심하자...)
 
   return (
     <Container>
@@ -72,7 +74,16 @@ export default function Structure() {
         return (
           <div key={room} className={className}>
             {room} : {clean}
-            {room === "거실" ? null : <img src={clean === 100 ?`./images/${okImg}.png` : `./images/${imgName}.png`} alt={room}></img>}
+            {room !== "거실" && (
+              <img
+                src={
+                  clean === 100
+                    ? `./images/${okImg}.png`
+                    : `./images/${imgName}.png`
+                }
+                alt={room}
+              ></img>
+            )}
           </div>
         );
       })}
@@ -99,7 +110,7 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     > img {
-      width: 100px;
+      width: 60%;
     }
   }
 
