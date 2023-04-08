@@ -1,9 +1,20 @@
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
-import { tippingName, nameInputState, rejectAlterState } from "../../atom/atom";
+import {
+  tippingName,
+  nameInputState,
+  rejectAlterState,
+  successLoginState,
+  loginState,
+} from "../../atom/atom";
 import NameInput from "./NameInput";
 import MainAlter from "./MainAlter";
 import AnswerBtn from "./AnswerBtn";
+import SuccessLogin from "./SuccessLogin";
+import Login from "./Login";
+
+// 앞에 콤마를 찍고 뒤에 set함수를 가져옴
+// 앞에 빈칸으로 두고
 
 export default function Main() {
   const [name] = useRecoilState(tippingName);
@@ -12,12 +23,16 @@ export default function Main() {
   // 이름 입력과 제출이 완료되면 상태값 바꾸기
   const [rejectModal] = useRecoilState(rejectAlterState);
   // 거절 버튼에 따른 이미지 모달 상태값
+  const [loginValue, setLoginValue] = useRecoilState(loginState);
+  const [successLogin, setsuccessLogin] = useRecoilState(successLoginState);
 
   return (
     <Container>
+      {!successLogin ? <SuccessLogin /> : null}
+      {!loginValue ? <Login /> : null}
       {!nameModal ? <NameInput /> : null}
       {!rejectModal ? <MainAlter /> : null}
-      <div className="offer">{name}~청소기 좀 돌릴래?</div>
+      <div className="offer">{name}~ 청소기 좀 돌릴래?</div>
       <AnswerBtn />
     </Container>
   );
