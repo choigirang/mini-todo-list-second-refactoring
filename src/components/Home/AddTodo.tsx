@@ -52,7 +52,6 @@ export default function AddTodo() {
 
   const addTodo = (event: React.FormEvent) => {
     event.preventDefault();
-    const idx = items.findIndex((todo) => todo.id === selectState);
     // AddTodo, 이미 작성된 요소를 선택 시,
     // 선택한 요소의 id 값을 저장하고,
     // 저장된 id 값이 있을 시 선택한 요소에 새로운 값으로 update
@@ -131,7 +130,7 @@ export default function AddTodo() {
         </div>
         <form onSubmit={addTodo}>
           <div>
-            <span className="">어디를 청소하지?</span>
+            <span className="roomTitle">어디를 청소하지?</span>
             <select
               className="roomSelect"
               onChange={(event) => setRoom(event.target.value)}
@@ -144,7 +143,7 @@ export default function AddTodo() {
             </select>
           </div>
           <div>
-            <span>뭘로 청소하지?</span>
+            <span className="toolTitle">뭘로 청소하지?</span>
             <select
               className="toolSelect"
               onChange={(event) => setTool(event.target.value)}
@@ -186,11 +185,15 @@ const TodoPaper = styled.div`
 
   > .top {
     display: flex;
-  }
+    > .title {
+      margin-top: 1rem;
+      font-size: 2rem;
+    }
 
-  > .title {
-    margin-top: 1rem;
-    font-size: 2rem;
+    > .closeBtn {
+      position: absolute;
+      right: 5%;
+    }
   }
 
   > form {
