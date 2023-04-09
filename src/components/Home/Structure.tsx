@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useRecoilValue } from "recoil";
-import { roomState } from "../../atom/atom";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { roomState, updateCleanState } from "../../atom/atom";
 import axios from "axios";
 
 interface Room {
@@ -22,6 +22,8 @@ export default function Structure() {
   // const keyName = ["엄마방", "아빠방", "내방", "누나방", "거실"];
   // 객체로 관리하면 한 줄로 가능, 객체 key
   const [cleanData, setCleanData] = useState<Clean[]>([]);
+
+  const [updateClean, setUpdateClean] = useRecoilState(updateCleanState);
 
   const roomInfo: Record<
     string,
@@ -60,11 +62,21 @@ export default function Structure() {
       .get("http://localhost:4000/clean")
       .then((res) => {
         setCleanData(res.data);
+        returnCleanState();
       })
       .catch((err) => console.error(err));
-  }, []);
+  }, [updateClean]);
   // 의존성, 무한 => 수정필
   // 다른 상태를 하나 더 파서 관리(고심하자...)
+
+  const returnCleanState = () => {
+    setUpdateClean(0);
+  };
+  // cleanData가 업데이트 될 때를 useEffect를 사용하면
+  // 무한 루프가 발생
+  // input을 체크하면 recoil 전역 상태가 바뀌고
+  // 전역 상태를 받아와, 상태가 변경되면 리렌더링되도록
+  // 전역 상태는 다시 초기값으로 설정
 
   return (
     <Container>
