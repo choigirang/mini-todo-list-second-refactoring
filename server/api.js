@@ -1,3 +1,5 @@
+// import { Request, Response } from "express";
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -10,6 +12,19 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // express 서버를 쓸 때 app.use("/:id", (req,res) => {})
+
+// type Clean = {
+//   id: number;
+//   room: string;
+//   clean: number;
+// };
+
+// type Todo = {
+//   id: number;
+//   room: string;
+//   tool: string;
+//   checked: boolean;
+// };
 
 const clean = [
   { id: 0, room: "엄마방", clean: 0 },
@@ -36,7 +51,7 @@ app.get("/clean", (req, res) => {
 // 특정 id를 가진 요소 불러오기
 app.get("/todos/:id", (req, res) => {
   const id = req.params.id;
-  const todo = todos.find((item) => item.id == id);
+  const todo = todos.find((item) => item.id == Number(id));
   if (todo) {
     res.json(todo);
   } else {
@@ -97,7 +112,7 @@ app.patch("/clean", (req, res) => {
 // 클릭한 요소에 해당하는 데이터 삭제하기
 app.delete("/todos/:id", (req, res) => {
   const id = req.params.id;
-  const index = todos.findIndex((item) => item.id == id);
+  const index = todos.findIndex((item) => item.id == Number(id));
   if (index !== -1) {
     todos.splice(index, 1);
     res.status(204).send();
