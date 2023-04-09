@@ -28,8 +28,8 @@ export default function InsertBtn() {
           ></img>
         );
       })}
-      {penState ? <AddTodo /> : null}
-      {stopState ? <StopBrowser /> : null}
+      {penState && <AddTodo />}
+      {stopState && <StopBrowser />}
     </Container>
   );
 }

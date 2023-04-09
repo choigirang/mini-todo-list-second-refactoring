@@ -28,10 +28,10 @@ export default function Main() {
 
   return (
     <Container>
-      {!successLogin ? <SuccessLogin /> : null}
-      {!loginValue ? <Login /> : null}
-      {!nameModal ? <NameInput /> : null}
-      {!rejectModal ? <MainAlter /> : null}
+      {!successLogin && <SuccessLogin />}
+      {!loginValue && <Login />}
+      {!nameModal && <NameInput />}
+      {!rejectModal && <MainAlter />}
       <div className="offer">{name}~ 청소기 좀 돌릴래?</div>
       <AnswerBtn />
     </Container>

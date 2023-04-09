@@ -90,3 +90,13 @@ export const signInState = atom({
   key: "signInState",
   default: false,
 });
+
+export const updateCleanState = atom({
+  key: "updateCleanState",
+  default: 0,
+});
+
+export const updateTodoState = atom({
+  key: "updateTodoState",
+  default: 0,
+});

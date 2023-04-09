@@ -4,8 +4,6 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { loginState, signInState } from "./../../atom/atom";
 import SignPage from "./SignPage";
-import AddTodo from "./../Home/AddTodo";
-import Background from "./../Background";
 
 interface LoginUser {
   id: string;
@@ -41,13 +39,10 @@ export default function Login() {
       );
       if (matchedUser) {
         // 로그인 성공 처리
-        console.log("로그인 성공");
         setLoginValue(!loginValue);
-        console.log(message);
         setMessage(true);
       } else {
         // 로그인 실패 처리
-        console.log("로그인 실패");
         setMessage(false);
       }
     });
