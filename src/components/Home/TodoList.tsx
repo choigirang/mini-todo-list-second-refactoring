@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import axios from "axios";
 import {
   itemState,
   penAlterState,
   roomState,
   selectNumState,
+  updateCleanState,
 } from "./../../atom/atom";
 
 interface Todo {
@@ -29,7 +30,9 @@ export default function TodoList() {
   // api에서 받아온 data의 check 여부 확인 상태
   const [apiChecks, setApiChecks] = useState<Todo[]>([]);
 
-  const apiCheck = apiChecks && apiChecks.map((check) => check.checked);
+  const updateClean = useSetRecoilState(updateCleanState);
+  // 무한루프 해결 및 상태값 변경되는대로 structure의 값이 자동적으로
+  // 업데이트 시키기 위해
 
   useEffect(() => {
     axios
@@ -39,11 +42,14 @@ export default function TodoList() {
         setApiChecks(res.data);
       })
       .catch((err) => console.log(err));
-  }, [apiTodos, apiCheck]);
+  }, [penState]);
   // api에서 todoList 받아오기
   // 1. get으로 새로운 요청
   // 2. state에 바로 추가를 해준다.
   // 3. post에서 응답값을 업데이트 상태 넣기
+
+  // 의존성 배열에는 penState가 열리고 닫힐 때마다
+  // 배열에 추가되는 것이기 때문에
 
   const deleteTodo = (
     event: React.MouseEvent<HTMLSpanElement, MouseEvent> | undefined,
@@ -80,6 +86,8 @@ export default function TodoList() {
     const { data } = await axios.get(`http://localhost:4000/todos/${id}`);
     const check = data.checked;
 
+    updateClean((pre) => pre + 1);
+
     // if (rooms.find((room) => room.room)?.[room] <= 100) return;
 
     if (check) return;
@@ -103,11 +111,7 @@ export default function TodoList() {
       // ]);
       // recoil
       const num = 10;
-      axios
-        .patch(`http://localhost:4000/clean`, { roomIdx, room, num })
-        .then((res) => {
-          console.log(res.data);
-        });
+      axios.patch(`http://localhost:4000/clean`, { roomIdx, room, num });
     }
     if (tool === "몰래안하기") {
       // setRooms((prev) => [
@@ -118,11 +122,7 @@ export default function TodoList() {
       // 리코일
 
       const num = 0;
-      axios
-        .patch(`http://localhost:4000/clean`, { roomIdx, room, num })
-        .then((res) => {
-          console.log(res.data);
-        });
+      axios.patch(`http://localhost:4000/clean`, { roomIdx, room, num });
     }
     if (tool === "빗자루질하기") {
       // setRooms((prev) => [
@@ -132,11 +132,7 @@ export default function TodoList() {
       // ]);
 
       const num = 5;
-      axios
-        .patch(`http://localhost:4000/clean`, { roomIdx, room, num })
-        .then((res) => {
-          console.log(res.data);
-        });
+      axios.patch(`http://localhost:4000/clean`, { roomIdx, room, num });
     }
     if (tool === "걸레질하기") {
       // setRooms((prev) => [
@@ -146,11 +142,7 @@ export default function TodoList() {
       // ]);
 
       const num = 20;
-      axios
-        .patch(`http://localhost:4000/clean`, { roomIdx, room, num })
-        .then((res) => {
-          console.log(res.data);
-        });
+      axios.patch(`http://localhost:4000/clean`, { roomIdx, room, num });
     }
   };
   // 입력된 tool에 따라 청소 상태를 증가시키기 위한 함수
@@ -187,6 +179,7 @@ export default function TodoList() {
                 event.stopPropagation();
                 increaseRoomState(item.id, item.room, item.tool);
                 updateChecked(item.id, item.room, item.tool);
+                setApiChecks(apiChecks.slice());
               }}
               disabled={item.checked}
               // delete 구현하면 하나씩 빠짐
@@ -197,6 +190,7 @@ export default function TodoList() {
             <span
               onClick={(event) => {
                 deleteTodo(event, item.id);
+                setApiChecks(apiChecks.slice());
               }}
             >
               X
