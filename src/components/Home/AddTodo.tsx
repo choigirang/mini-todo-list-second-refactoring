@@ -69,18 +69,11 @@ export default function AddTodo() {
         // 리코일 상태 update
 
         // api update
-        axios
-          .post(`http://localhost:4000/todos`, {
-            selectState,
-            room,
-            tool,
-          })
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        axios.post(`http://localhost:4000/todos`, {
+          selectState,
+          room,
+          tool,
+        });
         setRoom("");
         setTool("");
         setPenState(!penState);
@@ -98,18 +91,16 @@ export default function AddTodo() {
       //     tool,
       //   },
       // ]);
-      axios
-        .post(`http://localhost:4000/todos`, { room, tool })
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      axios.post(`http://localhost:4000/todos`, { room, tool });
       setRoom("");
       setTool("");
       setPenState(!penState);
     }
+  };
+
+  const closeModal = () => {
+    setPenState(!penState);
+    setSelectState(-1);
   };
   // 선택한 옵션값을 받아 atom의 default에 추가
 
@@ -129,7 +120,7 @@ export default function AddTodo() {
           </div>
         </div>
         <form onSubmit={addTodo}>
-          <div>
+          <div className="selectBox">
             <span className="roomTitle">어디를 청소하지?</span>
             <select
               className="roomSelect"
@@ -142,7 +133,7 @@ export default function AddTodo() {
               ))}
             </select>
           </div>
-          <div>
+          <div className="selectBox">
             <span className="toolTitle">뭘로 청소하지?</span>
             <select
               className="toolSelect"
@@ -158,10 +149,10 @@ export default function AddTodo() {
               ))}
             </select>
           </div>
-          <button>추가하기</button>
+          <button className="addBtn">추가하기</button>
         </form>
       </TodoPaper>
-      <Background />
+      <Background onClick={closeModal} />
     </>
   );
 }
@@ -171,22 +162,57 @@ const TodoPaper = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 30%;
+  width: 35%;
   max-width: 450px;
   min-width: 300px;
-  height: 80vh;
-  background: white;
+  height: 60vh;
   z-index: 1000;
   padding: 1%;
   display: flex;
   justify-content: start;
   align-items: center;
   flex-direction: column;
+  background: linear-gradient(0deg, #ffffff 0%, #b8b8b8 100%);
+  overflow: hidden;
+  border-radius: 1rem;
+
+  &::before {
+    position: absolute;
+    content: "";
+    display: inline-block;
+    top: -180px;
+    left: 0;
+    width: 30px;
+    height: 100%;
+    background-color: #fff;
+    animation: shiny-btn1 3s ease-in-out infinite;
+  }
+
+  @keyframes shiny-btn1 {
+    0% {
+      -webkit-transform: scale(0) rotate(45deg);
+      opacity: 0;
+    }
+    80% {
+      -webkit-transform: scale(0) rotate(45deg);
+      opacity: 0.5;
+    }
+    81% {
+      -webkit-transform: scale(4) rotate(45deg);
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: scale(50) rotate(45deg);
+      opacity: 0;
+    }
+  }
 
   > .top {
     display: flex;
+
     > .title {
-      margin-top: 1rem;
+      margin-top: 4rem;
+      margin-bottom: 3rem;
       font-size: 2rem;
     }
 
@@ -199,6 +225,33 @@ const TodoPaper = styled.div`
   > form {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    > .selectBox {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    > .addBtn {
+      position: absolute;
+      bottom: 20%;
+      width: 7rem;
+      height: 2rem;
+      border-radius: 5px;
+      box-shadow: 0px 4px #797d7e;
+      background-color: #979896;
+      border: none;
+      color: white;
+      font-family: "Child";
+      font-size: 2rem;
+    }
+
+    > .addBtn:active {
+      box-shadow: 0 0 #7f7f7f;
+      background-color: #545454;
+    }
   }
 `;
 
