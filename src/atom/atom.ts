@@ -8,6 +8,7 @@ type Room = {
 };
 
 // Home 컴포넌트에서 사용 Btn
+// TodoList 추가 버튼
 export const penAlterState = atom({
   key: "penAlterState",
   default: false,
@@ -20,6 +21,7 @@ export const selectNumState = atom({
 });
 
 // Home 컴포넌트에서 사용 Btn
+// 그만할까 버튼
 export const stopAlterState = atom({
   key: "stopAlterState",
   default: true,
@@ -76,26 +78,33 @@ export const roomState = atom<Room[]>({
 // atom 값을 가져오려면 useRecoilValue
 // const myAtomValue = useRecoilValue(myAtom);
 
+// 로그인 Api
 export const loginState = atom({
   key: "loginState",
   default: false,
 });
 
+// 로그인 완료 시 로그인 성공 페이지
 export const successLoginState = atom({
   key: "successLoginState",
   default: false,
 });
 
+// 회원가입 페이지
 export const signInState = atom({
   key: "signInState",
   default: false,
 });
 
+// Todolist에서 input check 시
+// Structure 업데이트
 export const updateCleanState = atom({
   key: "updateCleanState",
   default: 0,
 });
 
+// AddTodo 종료 시
+// TodoList 업데이트
 export const updateTodoState = atom({
   key: "updateTodoState",
   default: 0,
