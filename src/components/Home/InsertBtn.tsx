@@ -14,6 +14,8 @@ export default function InsertBtn() {
   const changeAtoms = (image: string) => {
     if (image === "pen" && penState !== stopState) setPenState(!penState);
     if (image === "stopBtn" && penState !== stopState) setStopState(!stopState);
+    console.log("stopState", stopState);
+    console.log("penState", penState);
   };
 
   return (
@@ -29,7 +31,7 @@ export default function InsertBtn() {
         );
       })}
       {penState && <AddTodo />}
-      {stopState && <StopBrowser />}
+      {!stopState && <StopBrowser />}
     </Container>
   );
 }
