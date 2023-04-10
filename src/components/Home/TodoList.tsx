@@ -40,6 +40,7 @@ export default function TodoList() {
       .then((res) => {
         setApiTodos(res.data);
         setApiChecks(res.data);
+        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, [penState]);
@@ -208,6 +209,7 @@ const Container = styled.div`
   padding: 1%;
   display: flex;
   flex-direction: column;
+  overflow: scroll;
 
   > div {
     display: flex;
