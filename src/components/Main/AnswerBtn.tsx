@@ -10,6 +10,7 @@ export default function AnswerBtn() {
   const alterChange = () => {
     setReject(!reject);
   };
+  // 알림창에서 거절 버튼 noBtn 클릭 시 상태를 변경시켜 알림창 닫기
 
   return (
     <Container>
