@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import axios from "axios";
 import {
   itemState,
@@ -17,14 +17,16 @@ interface Todo {
   checked: boolean;
 }
 
+interface Tool {
+  [key: string]: number;
+}
+
 export default function TodoList() {
-  const [list, setList] = useRecoilState(itemState);
-  // 저장된 todoList
   const [penState, setPenState] = useRecoilState(penAlterState);
   // AddTodo 컴포넌트 모달을 띄우기 위한 state
-  const [selectState, setSelectState] = useRecoilState(selectNumState);
+  const setSelectState = useSetRecoilState(selectNumState);
   // 클릭한 요소의 id 값 저장을 위한 상태값
-  const [rooms, setRooms] = useRecoilState(roomState);
+  const rooms = useRecoilValue(roomState);
   // 클릭한 요소에 따라 퍼센테이지를 올려주기
   const [apiTodos, setApiTodos] = useState<Todo[]>();
   // api에서 받아온 data의 check 여부 확인 상태
@@ -57,16 +59,8 @@ export default function TodoList() {
     id: number
   ) => {
     event!.stopPropagation();
-    // setList((prev) => prev.filter((item) => item.id !== id));
-    // 리코일 상태값
-
-    // api 작성
-    axios
-      .delete(`http://localhost:4000/todos/${id}`)
-      .then((res) => {
-        setApiTodos((prev) => prev?.filter((item) => item.id !== id));
-      })
-      .catch((err) => console.log(err));
+    axios.delete(`http://localhost:4000/todos/${id}`);
+    setApiTodos((prev) => prev?.filter((item) => item.id !== id));
   };
   // 클릭한 요소 삭제
 
@@ -82,69 +76,40 @@ export default function TodoList() {
   // 불필요한 요청은 최소화
   // 클라이언트에 있는 데이터를 가지고 사용
   const increaseRoomState = async (id: number, room: string, tool: string) => {
-    const idx = rooms.findIndex((idx) => room in idx);
-
     const { data } = await axios.get(`http://localhost:4000/todos/${id}`);
     const check = data.checked;
 
     updateClean((pre) => pre + 1);
 
-    // if (rooms.find((room) => room.room)?.[room] <= 100) return;
-
     if (check) return;
-    // data를 받아와서 한 번 청소가 완료된 (checked가 true)
-    // 방의 청소 퍼센테이지가 올라가지 않도록 한다.
 
-    // if문 좀 줄이자
-    // 하드코딩의 왕
-    let roomIdx = 0;
-    if (room === "엄마방") roomIdx = 0;
-    if (room === "아빠방") roomIdx = 1;
-    if (room === "누나방") roomIdx = 2;
-    if (room === "내방") roomIdx = 3;
-    if (room === "거실") roomIdx = 4;
+    const roomIdx = (() => {
+      switch (room) {
+        case "엄마방":
+          return 0;
+        case "아빠방":
+          return 1;
+        case "누나방":
+          return 2;
+        case "내방":
+          return 3;
+        case "거실":
+          return 4;
+        default:
+          return 0;
+      }
+    })();
+    // 함수를 즉시 실행시키고 roomIdx에 할당을 위한 빈괄호 사용
 
-    if (tool === "청소기돌리기") {
-      // setRooms((prev) => [
-      //   ...prev.slice(0, idx),
-      //   { [room]: prev[idx][room] + 10 },
-      //   ...prev.slice(idx + 1),
-      // ]);
-      // recoil
-      const num = 10;
-      axios.patch(`http://localhost:4000/clean`, { roomIdx, room, num });
-    }
-    if (tool === "몰래안하기") {
-      // setRooms((prev) => [
-      //   ...prev.slice(0, idx),
-      //   { [room]: prev[idx][room] },
-      //   ...prev.slice(idx + 1),
-      // ]);
-      // 리코일
+    const toolNums: Tool = {
+      청소기돌리기: 10,
+      몰래안하기: 0,
+      빗자루질하기: 5,
+      걸레질하기: 20,
+    };
 
-      const num = 0;
-      axios.patch(`http://localhost:4000/clean`, { roomIdx, room, num });
-    }
-    if (tool === "빗자루질하기") {
-      // setRooms((prev) => [
-      //   ...prev.slice(0, idx),
-      //   { [room]: prev[idx][room] + 10 },
-      //   ...prev.slice(idx + 1),
-      // ]);
-
-      const num = 5;
-      axios.patch(`http://localhost:4000/clean`, { roomIdx, room, num });
-    }
-    if (tool === "걸레질하기") {
-      // setRooms((prev) => [
-      //   ...prev.slice(0, idx),
-      //   { [room]: prev[idx][room] + 20 },
-      //   ...prev.slice(idx + 1),
-      // ]);
-
-      const num = 20;
-      axios.patch(`http://localhost:4000/clean`, { roomIdx, room, num });
-    }
+    const num = toolNums[tool];
+    axios.patch(`http://localhost:4000/clean`, { roomIdx, room, num });
   };
   // 입력된 tool에 따라 청소 상태를 증가시키기 위한 함수
 
