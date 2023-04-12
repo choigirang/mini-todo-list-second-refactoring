@@ -1,16 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useRecoilValue, useRecoilState } from "recoil";
-import { roomState, updateCleanState } from "../../atom/atom";
+import { useRecoilState } from "recoil";
+import { updateCleanState } from "../../atom/atom";
 import axios from "axios";
-
-interface Room {
-  [key: string]: {
-    className: string;
-    imgName: string;
-    okImg: string;
-  };
-}
 
 interface Clean {
   room: string;
@@ -18,12 +10,10 @@ interface Clean {
 }
 
 export default function Structure() {
-  // const roomClean = useRecoilValue(roomState);
-  // const keyName = ["엄마방", "아빠방", "내방", "누나방", "거실"];
-  // 객체로 관리하면 한 줄로 가능, 객체 key
   const [cleanData, setCleanData] = useState<Clean[]>([]);
-
+  // 청소 상태 퍼센테이지 받아오기
   const [updateClean, setUpdateClean] = useRecoilState(updateCleanState);
+  // AddTodo를 열거나 input을 클릭 시 청소 상태 업데이트 시키기
 
   const roomInfo: Record<
     string,

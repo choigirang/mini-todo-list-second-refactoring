@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import axios from "axios";
 import {
-  itemState,
   penAlterState,
-  roomState,
   selectNumState,
   updateCleanState,
 } from "./../../atom/atom";
@@ -26,8 +24,6 @@ export default function TodoList() {
   // AddTodo 컴포넌트 모달을 띄우기 위한 state
   const setSelectState = useSetRecoilState(selectNumState);
   // 클릭한 요소의 id 값 저장을 위한 상태값
-  const rooms = useRecoilValue(roomState);
-  // 클릭한 요소에 따라 퍼센테이지를 올려주기
   const [apiTodos, setApiTodos] = useState<Todo[]>();
   // api에서 받아온 data의 check 여부 확인 상태
   const [apiChecks, setApiChecks] = useState<Todo[]>([]);

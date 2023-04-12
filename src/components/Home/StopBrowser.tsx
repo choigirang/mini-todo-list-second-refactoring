@@ -1,10 +1,10 @@
-import React, { useState } from "react";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { stopAlterState } from "../../atom/atom";
 
 export default function StopBrowser() {
   const [stopAlter, setStopAlter] = useRecoilState(stopAlterState);
+  // 그말할까 모달창 띄우고 닫아줄 상태값
 
   const closeModal = () => {
     setStopAlter(!stopAlter);

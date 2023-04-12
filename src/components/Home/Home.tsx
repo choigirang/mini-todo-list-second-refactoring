@@ -1,7 +1,7 @@
 import Structure from "./Structure";
 import TodoList from "./TodoList";
 import styled from "styled-components";
-import InsertBtn from "./InsertBtn";
+import InsertBtn from "./Button/InsertBtn";
 
 export default function Home() {
   return (
