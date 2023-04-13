@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   penAlterState,
   selectNumState,
   updateCleanState,
 } from "./../../atom/atom";
+import { useQuery } from "react-query";
+
+async function takeData(): Promise<Todo> {
+  const res = await axios.get<Todo>("http://localhost:4000/todos");
+  return res.data;
+}
+// 어떠한 get 요청에 어떠한 형태의 값이 들어오는지 지정해준다.
 
 interface Todo {
   id: number;
@@ -32,13 +39,25 @@ export default function TodoList() {
   // 무한루프 해결 및 상태값 변경되는대로 structure의 값이 자동적으로
   // 업데이트 시키기 위해
 
+  const {
+    data: d,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<Todo>("post", takeData, { refetchOnWindowFocus: false });
+  // 콜론하고 이름을 바꿀 수 있다.
+  // 브라우저의 포커싱이 바뀔 때마다 요청을 하는 것을 true/false로 설정할 수 있다.
+  if (d) console.log("queryData =>", d);
+  // console.log("queryloading =>", isLoading);
+  // console.log("queryisError =>", isError);
+  // console.log("queryerr =>", error);
+
   useEffect(() => {
     axios
       .get("http://localhost:4000/todos")
       .then((res) => {
         setApiTodos(res.data);
         setApiChecks(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, [penState]);
