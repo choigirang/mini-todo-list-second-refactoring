@@ -4,17 +4,12 @@ import { useState } from "react";
 import { useRecoilState } from "recoil";
 import axios from "axios";
 import { penAlterState, selectNumState } from "../../../atom/atom";
+import { useQuery } from "react-query/types/react";
 
 type Tool = {
   [key: string]: number | string;
 };
 
-// JSX.element
-// props로 children 들어갈 때
-// 자식 요소를 공통으로 사용하는 경우에
-// 페이지를 여러 개로 쓰게 되면, 재활용하게 됨
-// children 타입을 정해줘야 한다.
-// 부모쪽에서 해결하자
 export default function AddTodo() {
   const rooms: string[] = [
     "방 선택",
@@ -75,6 +70,10 @@ export default function AddTodo() {
     setSelectState(-1);
   };
   // 선택한 옵션값을 받아 atom의 default에 추가
+
+  const {data} = useQuery("post")
+  // 구조분해
+  // useQuery
 
   return (
     <>
