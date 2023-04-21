@@ -4,6 +4,7 @@ import "./App.css";
 import Background from "./components/Background";
 import { QueryClient, QueryClientProvider } from "react-query";
 // 자식 컴포넌트에서 쿼리를 사용하기 위해 최상단에 클라이언트 생성
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const queryClient = new QueryClient();
 // 클라이언트가 가지고 있는 캐시와 기본 옵션을
@@ -30,6 +31,7 @@ function App() {
         </Suspense>
         <Background />
       </div>
+      <ReactQueryDevtools></ReactQueryDevtools>
     </QueryClientProvider>
   );
   // QueryClientProvider로 감싼 자식 컴포넌트들은 모두 React Query 훅을 사용할 수 있다.
