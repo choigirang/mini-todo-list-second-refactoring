@@ -44,7 +44,10 @@ export default function TodoList() {
     isLoading,
     isError,
     error,
-  } = useQuery<Todo>("post", takeData, { refetchOnWindowFocus: false });
+  } = useQuery<Todo>("post", takeData, {
+    staleTime: 2000,
+    refetchOnWindowFocus: false,
+  });
   // 콜론하고 이름을 바꿀 수 있다.
   // 브라우저의 포커싱이 바뀔 때마다 요청을 하는 것을 true/false로 설정할 수 있다.
   if (d) console.log("queryData =>", d);
