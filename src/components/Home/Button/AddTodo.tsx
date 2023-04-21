@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRecoilState } from "recoil";
 import axios from "axios";
 import { penAlterState, selectNumState } from "../../../atom/atom";
-import { useQuery } from "react-query/types/react";
+import { useQuery } from "@tanstack/react-query";
 
 type Tool = {
   [key: string]: number | string;
@@ -71,7 +71,7 @@ export default function AddTodo() {
   };
   // 선택한 옵션값을 받아 atom의 default에 추가
 
-  const {data} = useQuery("post")
+  // const { data } = useQuery("post");
   // 구조분해
   // useQuery
 
