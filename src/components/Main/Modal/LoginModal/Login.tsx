@@ -4,10 +4,16 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import SignPage from "./SignPage";
 import { loginState, signInState } from "../../../../atom/atom";
+import { QueryObserverResult, useQuery } from "react-query";
 
 interface LoginUser {
   id: string;
   pass: string;
+}
+
+async function login() {
+  const res = await axios.get("http://localhost:4000/login");
+  return res;
 }
 
 export default function Login() {
@@ -33,22 +39,25 @@ export default function Login() {
   };
   // 입력한 값으로 pass 바꾸기
 
+  const { data, isLoading, isError, error } = useQuery("get", () => login(), {
+    refetchOnWindowFocus: false,
+  });
+  // query 사용
+
   // login 버튼을 클릭 시 api에서 데이터를 받아와
   // recoil 상태값 변경
   const loginApi = () => {
-    axios.get<LoginUser[]>("http://localhost:4000/login").then((res) => {
-      const matchedUser = res.data.find(
-        (user) => user.id === id && user.pass === pw
-      );
-      if (matchedUser) {
-        // 로그인 성공 처리
-        setLoginValue(!loginValue);
-        setMessage(true);
-      } else {
-        // 로그인 실패 처리
-        setMessage(false);
-      }
-    });
+    const matchedUser =
+      data &&
+      data.data.find((user: LoginUser) => user.id === id && user.pass === pw);
+    if (matchedUser) {
+      // 로그인 성공 처리
+      setLoginValue(!loginValue);
+      setMessage(true);
+    } else {
+      // 로그인 실패 처리
+      setMessage(false);
+    }
   };
 
   const signIn = () => {
@@ -77,6 +86,10 @@ export default function Login() {
         {!message && (
           <div className="message">아이디와 비밀번호를 확인하세요.</div>
         )}
+        {isError && (
+          <div className="message">네트워크가 원할하지 않습니다.</div>
+        )}
+        {/* 데이터 통신 뒤에 떠오르는 것 해결 */}
         <LoginBtn onClick={loginApi} />
         <SignBtn onClick={signIn} />
       </Container>
