@@ -132,7 +132,7 @@ const login = [
 ];
 
 app.get("/login", (req, res) => {
-  res.json(login);
+  return res.json(login);
 });
 
 app.post("/login", (req, res) => {
@@ -142,5 +142,5 @@ app.post("/login", (req, res) => {
     pass,
   };
   login.push(newLogin);
-  console.log(login);
+  return login;
 });
