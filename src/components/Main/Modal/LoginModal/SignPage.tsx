@@ -3,6 +3,18 @@ import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { signInState } from "../../../../atom/atom";
+import { useMutation } from "react-query";
+
+interface LoginUser {
+  id: string;
+  pass: string;
+}
+
+async function signIn(idPw: LoginUser) {
+  const res = await axios.post("http://localhost:4000/login", idPw);
+  console.log(res);
+  return res;
+}
 
 export default function Sign() {
   const [id, setId] = useState("");
@@ -22,6 +34,8 @@ export default function Sign() {
     setPw(event.target.value);
   };
   // 입력한 패스워드
+
+  const postSignIn = useMutation((postSign) => signIn(postSign));
 
   const signApi = () => {
     axios.post("http://localhost:4000/login", { id, pw });
@@ -45,7 +59,7 @@ export default function Sign() {
           ></input>
         </div>
       ))}
-      <SignBtn onClick={signApi} />
+      <SignBtn onClick={() => postSignIn.mutate({ id, pw })} />
     </Container>
   );
 }
