@@ -126,21 +126,24 @@ app.listen(4000, () => {
 });
 
 // 로그인
-const login = [
-  { id: "choi", pass: "1234" },
-  { id: "kim", pass: "1234" },
+let login = [
+  { id: "choi", pw: "1234" },
+  { id: "kim", pw: "1234" },
 ];
 
 app.get("/login", (req, res) => {
+  console.log(login);
   return res.json(login);
 });
 
 app.post("/login", (req, res) => {
-  const { id, pass } = req.body;
-  const newLogin = {
-    id,
-    pass,
-  };
-  login.push(newLogin);
-  return login;
+  const { id, pw } = req.body;
+  const alreadyId = login.find((user) => user.id === id);
+  if (alreadyId) {
+    console.log("중복되는 아이디입니다.");
+  }
+  const newLogin = [...login, { id, pw }];
+  login = newLogin;
+  console.log(newLogin);
+  return res.json(login);
 });
