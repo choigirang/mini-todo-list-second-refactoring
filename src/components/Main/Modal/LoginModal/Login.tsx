@@ -8,7 +8,7 @@ import { QueryObserverResult, useQuery } from "react-query";
 
 interface LoginUser {
   id: string;
-  pass: string;
+  pw: string;
 }
 
 async function login() {
@@ -41,15 +41,22 @@ export default function Login() {
 
   const { data, isLoading, isError, error } = useQuery("get", () => login(), {
     refetchOnWindowFocus: false,
+    staleTime: 2000,
+    cacheTime: 1000,
   });
   // query 사용
 
   // login 버튼을 클릭 시 api에서 데이터를 받아와
   // recoil 상태값 변경
-  const loginApi = () => {
-    const matchedUser =
-      data &&
-      data.data.find((user: LoginUser) => user.id === id && user.pass === pw);
+  const loginApi = async () => {
+    // login 함수를 실행해서 새로이 get해서 비교해야 되는데
+    // 갖고 있던 데이터로만 비교를 함
+    const response = await axios.get("http://localhost:4000/login");
+    console.log(response);
+    const matchedUser = response.data.find(
+      (user: LoginUser) => user.id === id && user.pw === pw
+    );
+
     if (matchedUser) {
       // 로그인 성공 처리
       setLoginValue(!loginValue);
