@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import SignPage from "./SignPage";
 import { loginState, signInState } from "../../../../atom/atom";
-import { QueryObserverResult, useQuery } from "react-query";
+import { QueryObserverResult, useInfiniteQuery, useQuery } from "react-query";
 
 interface LoginUser {
   id: string;
@@ -81,7 +81,7 @@ export default function Login() {
           <div className={`${el}Box`} key={el}>
             <div>{el} :</div>
             <input
-              type="text"
+              type={el === "id" ? "text" : "password"}
               value={el === "id" ? id : pw}
               className={el === "id" ? "idInput" : "pwInput"}
               onChange={(event) =>
