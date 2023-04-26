@@ -5,6 +5,7 @@ import Background from "./components/Background";
 import { QueryClient, QueryClientProvider } from "react-query";
 // 자식 컴포넌트에서 쿼리를 사용하기 위해 최상단에 클라이언트 생성
 import { ReactQueryDevtools } from "react-query/devtools";
+import Example from "./components/Main/Modal/LoginModal/Example";
 
 const queryClient = new QueryClient();
 // 클라이언트가 가지고 있는 캐시와 기본 옵션을
@@ -29,6 +30,7 @@ function App() {
             <Route path="/Home" element={<Home />} />
           </Routes>
         </Suspense>
+        <Example />
         <Background />
       </div>
       <ReactQueryDevtools></ReactQueryDevtools>
