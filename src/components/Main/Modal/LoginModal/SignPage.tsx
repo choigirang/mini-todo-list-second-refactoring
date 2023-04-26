@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRecoilState } from "recoil";
 import { signInState } from "../../../../atom/atom";
 import { useMutation } from "react-query";
@@ -10,9 +10,8 @@ interface LoginUser {
   pw: string;
 }
 
-async function signIn(idPw: LoginUser) {
-  const res = await axios.post("http://localhost:4000/login", idPw);
-  return res;
+interface ResponseData {
+  message: string;
 }
 
 export default function Sign() {
@@ -24,6 +23,7 @@ export default function Sign() {
   // 회원가입 완료되면 회원가입창 닫기
   const els = ["id", "pw"];
   // 코드 간결화
+  const [idError, setIdError] = useState("");
   const idPw: LoginUser = { id, pw };
   const idChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setId(event.target.value);
@@ -33,9 +33,23 @@ export default function Sign() {
     setPw(event.target.value);
   };
   // 입력한 패스워드
+  async function signIn(idPw: LoginUser) {
+    const res = await axios.post("http://localhost:4000/signin", idPw);
+    return res;
+  }
+
+  useEffect(() => {
+    console.log(idError);
+  }, [idError]);
 
   // const postSignIn = useMutation((postSign) => signIn(postSign));
-  const postSignIn = useMutation((idPw: LoginUser) => signIn(idPw));
+  const postSignIn = useMutation((idPw: LoginUser) => signIn(idPw), {
+    onError: (err: AxiosError<ResponseData>) =>
+      alert(err.response?.data?.message),
+    onSuccess: () => {
+      alert("회원 가입에 성공했습니다.");
+    },
+  });
   // 입력한 아이디와 패스워드를 api에 보내주기
   return (
     <Container>
@@ -54,6 +68,7 @@ export default function Sign() {
           ></input>
         </div>
       ))}
+      {/* {isError && <div className="errorMsg">{error.message}</div>} */}
       <SignBtn
         onClick={() => {
           postSignIn.mutate(idPw);
