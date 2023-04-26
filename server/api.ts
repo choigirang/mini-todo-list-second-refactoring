@@ -1,5 +1,3 @@
-// import { Request, Response } from "express";
-
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -12,19 +10,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // express 서버를 쓸 때 app.use("/:id", (req,res) => {})
-
-// type Clean = {
-//   id: number;
-//   room: string;
-//   clean: number;
-// };
-
-// type Todo = {
-//   id: number;
-//   room: string;
-//   tool: string;
-//   checked: boolean;
-// };
 
 const clean = [
   { id: 0, room: "엄마방", clean: 0 },
@@ -136,14 +121,19 @@ app.get("/login", (req, res) => {
   return res.json(login);
 });
 
-app.post("/login", (req, res) => {
+app.post("/signin", (req, res) => {
   const { id, pw } = req.body;
-  const alreadyId = login.find((user) => user.id === id);
-  if (alreadyId) {
-    console.log("중복되는 아이디입니다.");
+  if (!id || !pw) {
+    console.log("id나 pw가 없습니다.");
+    return res.status(400).json({ message: "id나 pw가 없습니다." });
   }
-  const newLogin = [...login, { id, pw }];
-  login = newLogin;
-  console.log(newLogin);
+  const alreadyId = login.find((user) => user.id === id);
+  console.log(login.find((user) => user.id === id));
+  if (alreadyId !== undefined) {
+    console.log("중복되는 아이디입니다.");
+    return res.status(400).json({ message: "중복되는 아이디입니다." });
+  }
+  login.push({ id, pw });
+  console.log(login);
   return res.json(login);
 });
